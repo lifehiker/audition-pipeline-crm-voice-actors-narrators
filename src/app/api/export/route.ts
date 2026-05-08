@@ -33,7 +33,7 @@ export async function GET() {
       audition.payDetails,
       audition.status,
       audition.submittedAt,
-      audition.notes.replaceAll("\n", " "),
+      (audition.notes ?? "").replaceAll("\n", " "),
     ]
       .map((value) => `"${String(value).replaceAll('"', '""')}"`)
       .join(","),

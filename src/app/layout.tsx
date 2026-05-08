@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { getBaseUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     default: "VoiceLog | Audition Tracker CRM for Audiobook Narrators",
     template: "%s | VoiceLog",

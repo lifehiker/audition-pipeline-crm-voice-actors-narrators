@@ -107,11 +107,11 @@
 
 ## Verification Summary
 - `npm run build`
-  - Passed
+  - Passed on 2026-05-08 after final patches
 - `npm run dev`
-  - Started successfully on `http://localhost:3001` because `3000` was occupied
+  - Restarted cleanly on `http://127.0.0.1:3000`
 - Smoke-tested routes
-  - `/`, `/signin`, `/app` redirect protection, `/app`, `/app/pipeline`, `/app/account`, marketing pages
+  - `/`, `/signin`, `/app` redirect protection, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, `/royalty-share-calculator`
 - Smoke-tested interactions
   - Demo login/logout
   - Create audition
@@ -121,5 +121,9 @@
   - CSV export denial on Solo
   - Billing fallback redirect
   - Trial reminder guarded route
+- Final runtime hardening patches
+  - `src/app/layout.tsx`: `metadataBase` now derives from environment-aware base URL instead of hard-coded localhost
+  - `src/app/signin/page.tsx`: corrected missing-credentials fallback copy
+  - `src/app/api/export/route.ts`: CSV export now safely handles blank notes
 - Docker
-  - `docker build .` could not be executed successfully because the environment lacked permission to access `/var/run/docker.sock`
+  - `docker build .` could not be executed successfully because the environment lacks permission to access `/var/run/docker.sock`

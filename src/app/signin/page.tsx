@@ -43,7 +43,7 @@ export default function SignInPage() {
                 </form>
               ) : (
                 <div className="rounded-[24px] bg-[var(--paper)] p-4 text-sm leading-6 text-[var(--muted-ink)]">
-                  Google OAuth is configured but currently disabled until real credentials are present.
+                  Google OAuth is unavailable right now because real credentials have not been added yet.
                 </div>
               )}
               <form action="/api/demo-login" method="post">

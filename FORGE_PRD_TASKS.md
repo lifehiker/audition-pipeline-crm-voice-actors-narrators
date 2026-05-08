@@ -71,3 +71,12 @@
 - [x] Review UI for polish and non-template quality.
 - [x] Create `FORGE_COMPLETION_AUDIT.md`.
 - [x] Create `HUMAN_INPUT_NEEDED.md` only for genuine external credential requirements.
+
+## Final Re-Verification Notes
+- [x] Re-read the PRD sections covering auth fallback, pipeline workflow, analytics gating, billing/email fallbacks, SEO pages, and deployment expectations after implementation.
+- [x] Confirmed `next.config.ts` uses `output: "standalone"` for production deployment.
+- [x] Rebuilt successfully on 2026-05-08 with `npm run build`.
+- [x] Restarted the dev server from a clean `.next` directory and re-verified `/`, `/signin`, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, and `/royalty-share-calculator`.
+- [x] Re-verified demo login, audition create/status update/delete, billing fallback redirect, and CSV export gating.
+- [x] Confirmed the Dockerfile only copies paths that exist in the repository.
+- [x] Attempted `docker build .`; Docker CLI exists, but this environment cannot access `/var/run/docker.sock`, so image execution could not be completed here.
