@@ -45,6 +45,7 @@
   Implemented in [store.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/store.ts) with seed content from [demo-data.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/demo-data.ts).
 - Production deployment packaging:
   Implemented in [next.config.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/next.config.ts), [Dockerfile](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/Dockerfile), and [.dockerignore](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/.dockerignore).
+  The runtime container now sets safe build-time auth defaults, forces standalone binding to `0.0.0.0`, and pre-creates a writable `/app/.data` directory for the app's local fallback state.
 
 ## External Credential Items Intentionally Deferred
 
@@ -66,4 +67,4 @@
 - Interactive smoke tests:
   Demo login, audition create, audition status update, audition edit, audition delete, CSV export, trial reminder route, and Stripe webhook fallback all returned successful responses.
 - Docker build:
-  Could not be executed in this environment because the Docker daemon socket was not accessible, even though the Docker CLI is installed.
+  Could not be executed in this environment because the Docker daemon rejected access to `/var/run/docker.sock`, even though the Docker CLI is installed.

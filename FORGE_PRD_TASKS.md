@@ -60,10 +60,11 @@
 - [x] Set metadata, `robots`, and `sitemap` entries in [layout.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/layout.tsx), [robots.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/robots.ts), and [sitemap.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/sitemap.ts).
 - [x] Ensure the main navigation surfaces pricing and in-app audition management in [site-header.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/marketing/site-header.tsx) and [app-shell.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/app-shell.tsx).
 - [x] Review Docker packaging in [Dockerfile](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/Dockerfile) and `.dockerignore`.
+- [x] Harden runtime container defaults in [Dockerfile](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/Dockerfile) so standalone Next.js binds correctly on Coolify, ships build-time auth defaults, and grants the unprivileged runtime user write access to `.data/` for local fallbacks.
 
 ## Verification
 
 - [x] `npm run build` passes locally.
 - [x] `npm run dev` starts and primary pages respond.
 - [ ] Docker image build executed locally.
-  Blocked by inaccessible Docker daemon socket in this environment.
+  Blocked by Docker daemon permission denial in this environment (`permission denied while trying to connect to /var/run/docker.sock`).
