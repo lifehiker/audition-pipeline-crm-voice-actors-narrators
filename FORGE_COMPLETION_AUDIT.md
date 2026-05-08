@@ -81,6 +81,7 @@
 - Billing checkout / portal fallbacks
   - Routes: `/api/billing/checkout`, `/api/billing/portal`
   - Files: `src/app/api/billing/checkout/route.ts`, `src/app/api/billing/portal/route.ts`, `src/lib/billing.ts`
+  - Runtime hardening: checkout now accepts both standard HTML form posts and JSON requests, preventing 500s from invalid content types during fallback billing flows
 - Welcome email and trial reminder fallback paths
   - Files: `src/lib/email.ts`, `src/app/api/demo-login/route.ts`, `src/app/api/internal/trial-reminders/route.ts`
 
@@ -111,6 +112,8 @@
   - Passed on 2026-05-08 after final patches
 - `npm run dev`
   - Restarted cleanly on `http://127.0.0.1:3000`
+- Standalone production server
+  - Verified directly with `PORT=3002 HOSTNAME=127.0.0.1 node .next/standalone/server.js`
 - Smoke-tested routes
   - `/`, `/signin`, `/app` redirect protection, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, `/royalty-share-calculator`
 - Smoke-tested interactions
@@ -120,7 +123,7 @@
   - Delete audition
   - CSV export success on trial
   - CSV export denial on Solo
-  - Billing fallback redirect
+  - Billing fallback redirect from both form posts and JSON requests
   - Trial reminder guarded route
 - Final runtime hardening patches
   - `src/app/layout.tsx`: `metadataBase` now derives from environment-aware base URL instead of hard-coded localhost

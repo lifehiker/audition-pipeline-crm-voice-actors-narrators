@@ -76,7 +76,9 @@
 - [x] Re-read the PRD sections covering auth fallback, pipeline workflow, analytics gating, billing/email fallbacks, SEO pages, and deployment expectations after implementation.
 - [x] Confirmed `next.config.ts` uses `output: "standalone"` for production deployment.
 - [x] Rebuilt successfully on 2026-05-08 with `npm run build`.
+- [x] Hardened `/api/billing/checkout` so it accepts both browser form posts and JSON payloads instead of throwing a 500 on unexpected content types.
 - [x] Restarted the dev server from a clean `.next` directory and re-verified `/`, `/signin`, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, and `/royalty-share-calculator`.
-- [x] Re-verified demo login, audition create/status update/delete, billing fallback redirect, and CSV export gating.
+- [x] Re-verified demo login, audition create/status update/delete, billing fallback redirect, and CSV export gating from a reset `.data` baseline.
+- [x] Verified the standalone production entrypoint directly with `node .next/standalone/server.js`.
 - [x] Confirmed the Dockerfile only copies paths that exist in the repository and hardened the runtime image for standalone deployment.
 - [x] Attempted `docker build .`; Docker CLI exists, but this environment cannot access `/var/run/docker.sock`, so image execution could not be completed here.
