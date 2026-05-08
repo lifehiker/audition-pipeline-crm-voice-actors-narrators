@@ -312,6 +312,10 @@ export function PipelineBoard({ initialAuditions, plan }: Props) {
                   <Label htmlFor="finishedHours">Finished hours</Label>
                   <Input id="finishedHours" type="number" value={form.estimatedFinishedHours} onChange={(event) => setForm({ ...form, estimatedFinishedHours: event.target.value })} />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="monthlySalesEstimate">Monthly sales estimate</Label>
+                  <Input id="monthlySalesEstimate" type="number" value={form.monthlySalesEstimate} onChange={(event) => setForm({ ...form, monthlySalesEstimate: event.target.value })} />
+                </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="notes">Notes</Label>

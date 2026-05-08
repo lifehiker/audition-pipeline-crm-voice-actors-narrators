@@ -22,6 +22,7 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-6 text-sm text-[var(--muted-ink)] md:flex">
           <Link href="/acx-audition-tracker">ACX Tracker</Link>
           <Link href="/voice-actor-crm">Voice Actor CRM</Link>
+          <Link href="/pricing">Pricing</Link>
           <Link href="/royalty-share-calculator">Calculator</Link>
           <Link href="/blog/acx-royalty-share-vs-flat-fee">Guide</Link>
         </nav>

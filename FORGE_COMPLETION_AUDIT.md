@@ -1,173 +1,69 @@
 # VoiceLog Completion Audit
 
-Last updated: 2026-05-08
+## Core Product
 
-## Foundation
-- App shell, global styling, metadata, and brand system
-  - `src/app/layout.tsx`
-  - `src/app/globals.css`
-  - `src/components/marketing/site-header.tsx`
-  - `src/components/marketing/site-footer.tsx`
-- Next.js standalone deployment configuration
-  - `next.config.ts`
-  - `Dockerfile`
-  - `.dockerignore`
-  - `.env.example`
+- Multi-platform audition logging:
+  Implemented in [pipeline board](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/pipeline-board.tsx), [audition API create/update/delete routes](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auditions/route.ts), and [audition table editor](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/auditions-table.tsx).
+- Pipeline status workflow from Submitted to Passed:
+  Implemented in [pipeline board drag/drop and status select](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/pipeline-board.tsx) plus [status route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auditions/[id]/status/route.ts).
+- Dashboard metrics:
+  Implemented in [dashboard page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/page.tsx), [dashboard component](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/dashboard.tsx), and [analytics helpers](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/analytics.ts).
+- Royalty-share calculator:
+  Implemented in [royalty-calculator component](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/royalty-calculator.tsx), [royalty helper](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/royalty.ts), [standalone calculator page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/royalty-share-calculator/page.tsx), and embedded in royalty-share audition cards inside [pipeline board](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/pipeline-board.tsx).
+- CSV export:
+  Implemented in [api/export/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/export/route.ts) with trial/Pro gating.
 
-## Data Model
-- Auditions, subscriptions, auth tables, and analytics-supporting fields
-  - `prisma/schema.prisma`
-- Typed app/domain models and constants
-  - `src/lib/types.ts`
-  - `src/lib/constants.ts`
-- Local-safe persistence fallback with seeded demo state
-  - `src/lib/store.ts`
-  - `src/lib/demo-data.ts`
-- Prisma client helper for live database path
-  - `src/lib/prisma.ts`
+## Auth, Billing, And Email
 
-## Authentication
-- Google OAuth-ready NextAuth v5 configuration
-  - `src/lib/auth.ts`
-  - `src/app/api/auth/[...nextauth]/route.ts`
-- Safe demo auth fallback and protected app area
-  - `src/app/signin/page.tsx`
-  - `src/app/api/demo-login/route.ts`
-  - `src/app/api/demo-logout/route.ts`
-  - `src/app/app/layout.tsx`
+- Google OAuth with guarded fallback:
+  Implemented in [auth.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/auth.ts), [auth route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auth/[...nextauth]/route.ts), and [signin page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/signin/page.tsx).
+- Demo session fallback:
+  Implemented in [demo login route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/demo-login/route.ts), [demo logout route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/demo-logout/route.ts), and [app layout gate](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/layout.tsx).
+- Pricing and billing UI:
+  Implemented in [pricing page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/pricing/page.tsx) and [account page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/account/page.tsx).
+- Stripe-safe fallback behavior:
+  Implemented in [billing.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/billing.ts), [checkout route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/billing/checkout/route.ts), [portal route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/billing/portal/route.ts), and [webhook route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/webhooks/stripe/route.ts).
+- Email-safe fallback behavior:
+  Implemented in [email.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/email.ts), [internal reminder route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/internal/trial-reminders/route.ts), and [cron reminder route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/cron/trial-expiry/route.ts).
 
-## User-Facing Pages
-- Marketing homepage `/`
-  - `src/app/page.tsx`
-  - `src/components/marketing/homepage.tsx`
-- Dashboard `/app`
-  - `src/app/app/page.tsx`
-  - `src/components/dashboard.tsx`
-  - `src/components/charts.tsx`
-  - `src/lib/analytics.ts`
-- Pipeline board `/app/pipeline`
-  - `src/app/app/pipeline/page.tsx`
-  - `src/components/pipeline-board.tsx`
-- Account and billing `/app/account`
-  - `src/app/app/account/page.tsx`
-- Sign-in `/signin`
-  - `src/app/signin/page.tsx`
-- ACX SEO page `/acx-audition-tracker`
-  - `src/app/acx-audition-tracker/page.tsx`
-- Voice actor CRM SEO page `/voice-actor-crm`
-  - `src/app/voice-actor-crm/page.tsx`
-- Free calculator `/royalty-share-calculator`
-  - `src/app/royalty-share-calculator/page.tsx`
-  - `src/components/royalty-calculator.tsx`
-- Blog page `/blog/acx-royalty-share-vs-flat-fee`
-  - `src/app/blog/acx-royalty-share-vs-flat-fee/page.tsx`
+## Pages And Navigation
 
-## API / Server Workflows
-- List/create auditions
-  - `src/app/api/auditions/route.ts`
-- Update/delete auditions
-  - `src/app/api/auditions/[id]/route.ts`
-- Pipeline status mutation
-  - `src/app/api/auditions/[id]/status/route.ts`
-- Billing checkout + portal
-  - `src/app/api/billing/checkout/route.ts`
-  - `src/app/api/billing/portal/route.ts`
-  - `src/lib/billing.ts`
-- CSV export with plan gating
-  - `src/app/api/export/route.ts`
-- Trial reminder email path
-  - `src/app/api/internal/trial-reminders/route.ts`
-  - `src/lib/email.ts`
+- Marketing homepage and top-level navigation:
+  Implemented in [homepage.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/marketing/homepage.tsx), [site-header.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/marketing/site-header.tsx), and [site-footer.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/marketing/site-footer.tsx).
+- SEO pages:
+  Implemented in [acx-audition-tracker/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/acx-audition-tracker/page.tsx), [voice-actor-crm/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/voice-actor-crm/page.tsx), [royalty-share-calculator/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/royalty-share-calculator/page.tsx), and [blog page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/blog/acx-royalty-share-vs-flat-fee/page.tsx).
+- In-app navigation and responsive shell:
+  Implemented in [app-shell.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/app-shell.tsx).
+- Metadata, robots, sitemap:
+  Implemented in [app layout metadata](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/layout.tsx), [robots.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/robots.ts), and [sitemap.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/sitemap.ts).
 
-## Core Workflows
-- Add/edit/delete audition records with structured compensation fields
-  - `src/components/pipeline-board.tsx`
-  - `src/app/api/auditions/route.ts`
-  - `src/app/api/auditions/[id]/route.ts`
-- Move auditions through Submitted / Callback / Offered / Booked / Passed
-  - `src/components/pipeline-board.tsx`
-  - `src/app/api/auditions/[id]/status/route.ts`
-- Dashboard KPIs, platform mix, genre performance, and trend data
-  - `src/components/dashboard.tsx`
-  - `src/components/charts.tsx`
-  - `src/lib/analytics.ts`
-- Royalty-share calculator and inline offered/booked royalty analysis
-  - `src/components/royalty-calculator.tsx`
-  - `src/lib/royalty.ts`
-  - `src/components/pipeline-board.tsx`
-- CSV export for trial/pro, locked on solo
-  - `src/app/api/export/route.ts`
+## Data And Deploy
 
-## Billing / Email / Storage Integrations
-- Stripe lazy-init scaffold with local fallback
-  - `src/lib/billing.ts`
-- Resend lazy-init scaffold with local logging fallback
-  - `src/lib/email.ts`
-- Filesystem-backed fallback storage
-  - `src/lib/store.ts`
-  - Runtime data path: `.data/`
-
-## Marketing / SEO
-- Metadata and environment-aware base URL
-  - `src/app/layout.tsx`
-  - `src/lib/env.ts`
-- Sitemap and robots
-  - `src/app/sitemap.ts`
-  - `src/app/robots.ts`
-
-## Deployment Fixes Shipped
-- Hardened Docker build to use repository copy plus guaranteed `public/` creation before build
-  - `Dockerfile`
-- Hardened runtime image copies with `--chown`
-  - `Dockerfile`
-- Fixed chronological ordering for dashboard trend chart data
-  - `src/lib/analytics.ts`
-- Added mobile app-shell navigation/logout so protected pages remain usable on small screens
-  - `src/components/app-shell.tsx`
-- Added explicit droppable pipeline columns for clearer drag/drop behavior
-  - `src/components/pipeline-board.tsx`
+- Prisma data model:
+  Defined in [schema.prisma](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/prisma/schema.prisma).
+- Local/mock-safe runtime state:
+  Implemented in [store.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/store.ts) with seed content from [demo-data.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/demo-data.ts).
+- Production deployment packaging:
+  Implemented in [next.config.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/next.config.ts), [Dockerfile](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/Dockerfile), and [.dockerignore](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/.dockerignore).
 
 ## External Credential Items Intentionally Deferred
-- Google OAuth live auth
-  - Needs `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
-  - App still runs through demo login fallback
-- PostgreSQL persistence
-  - Needs `DATABASE_URL`
-  - App still runs through local JSON persistence
-- Stripe live billing
-  - Needs `STRIPE_SECRET_KEY`
-  - App still runs through local subscription fallback
-- Resend live email delivery
-  - Needs `RESEND_API_KEY`
-  - App still runs through local email event logging
 
-## Verification
-- `npm run build`
-  - Passed after final fixes on 2026-05-08
-- Dev server
-  - Started successfully with `npm run dev -- --hostname 127.0.0.1 --port 3005`
-- Standalone production server
-  - Started successfully with `PORT=3006 HOSTNAME=127.0.0.1 node .next/standalone/server.js`
-- Route smoke tests completed
-  - `/`
-  - `/signin`
-  - `/app` redirect protection
-  - `/app`
-  - `/app/pipeline`
-  - `/app/account`
-  - `/acx-audition-tracker`
-  - `/voice-actor-crm`
-  - `/royalty-share-calculator`
-  - `/blog/acx-royalty-share-vs-flat-fee`
-- Workflow smoke tests completed
-  - Demo login cookie flow
-  - Audition create
-  - Audition status update
-  - Audition delete
-  - CSV export success on trial
-  - CSV export denial on solo
-  - Billing checkout fallback redirect
-  - Billing portal fallback redirect
-  - Trial reminder guarded route
-- Docker
-  - `docker build .` was attempted but could not run in this workspace because the Docker CLI cannot access `/var/run/docker.sock`
+- Live Google OAuth login:
+  Requires Google client credentials listed in [HUMAN_INPUT_NEEDED.md](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/HUMAN_INPUT_NEEDED.md). The app still runs because demo auth is fully functional.
+- Live Stripe checkout, portal, and webhook subscription mutation:
+  Requires Stripe keys and live product/price setup from [HUMAN_INPUT_NEEDED.md](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/HUMAN_INPUT_NEEDED.md). The app still runs because plan switching falls back to local state mutation and the webhook route fails safely.
+- Live Resend delivery:
+  Requires `RESEND_API_KEY`. The app still runs because email events are logged locally.
+- Live PostgreSQL persistence:
+  Requires `DATABASE_URL`. The app still runs because local file storage preserves demo data and interactions in `.data/`.
+
+## Verification Summary
+
+- `npm run build`: passed on May 8, 2026.
+- `npm run dev`: started successfully on May 8, 2026.
+- Primary route smoke tests:
+  `/`, `/pricing`, `/signin`, `/acx-audition-tracker`, `/voice-actor-crm`, `/royalty-share-calculator`, `/app`, `/app/pipeline`, `/app/auditions`, `/app/account` all responded successfully, with `/app` redirecting to `/signin` before demo login as expected.
+- Interactive smoke tests:
+  Demo login, audition create, audition status update, audition edit, audition delete, CSV export, trial reminder route, and Stripe webhook fallback all returned successful responses.
+- Docker build:
+  Could not be executed in this environment because the Docker daemon socket was not accessible, even though the Docker CLI is installed.

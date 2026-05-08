@@ -8,6 +8,7 @@ import type { AppUser, Plan } from "@/lib/types";
 const links = [
   { href: "/app", label: "Dashboard", icon: Home },
   { href: "/app/pipeline", label: "Pipeline", icon: KanbanSquare },
+  { href: "/app/auditions", label: "Auditions", icon: Mic2 },
   { href: "/royalty-share-calculator", label: "Calculator", icon: DollarSign },
   { href: "/app/account", label: "Account", icon: BarChart3 },
 ];

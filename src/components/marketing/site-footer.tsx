@@ -8,6 +8,7 @@ export function SiteFooter() {
         <div className="flex flex-wrap gap-4">
           <Link href="/acx-audition-tracker">ACX Audition Tracker</Link>
           <Link href="/voice-actor-crm">Voice Actor CRM</Link>
+          <Link href="/pricing">Pricing</Link>
           <Link href="/royalty-share-calculator">Royalty Calculator</Link>
           <Link href="/app/account">Billing</Link>
         </div>

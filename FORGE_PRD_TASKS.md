@@ -1,96 +1,69 @@
-# VoiceLog PRD Task Checklist
-
-Last updated: 2026-05-08
+# VoiceLog PRD Task Ledger
 
 ## Foundation
-- [x] Read `PRD.md` end-to-end and `BUILD_INSTRUCTIONS.md` end-to-end
-- [x] Audit existing app structure, routes, APIs, data layer, and deployment config
-- [x] Reproduce current build and deployment issues locally
-- [x] Check for relevant local Next.js docs in `node_modules/next/dist/docs/`
-  - Result: the expected docs directory is not present in this installed `next` package, so work proceeded from the live build output and framework behavior instead
 
-## Data Model
-- [x] Define audition model covering platform, title, role, genre, pay type, structured economics, status, submission date, and notes
-- [x] Define subscription model with trial, solo, pro, invoices, renewal, and source metadata
-- [x] Include Prisma schema for production database path
-- [x] Provide safe local persistence fallback when database credentials are unavailable
-- [x] Verify Prisma artifacts and standalone build behavior are compatible with current repo layout
+- [x] Read `PRD.md` and `BUILD_INSTRUCTIONS.md` end to end.
+- [x] Verify Next.js deployment config uses `output: "standalone"` in [next.config.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/next.config.ts).
+- [x] Review Docker packaging and confirm it only copies directories created during the build when `public/` is absent.
+- [x] Re-run `npm run build` after code review and deployment fixes.
+
+## Data Model And Storage
+
+- [x] Define Prisma schema for users, auth tables, subscriptions, and auditions in [schema.prisma](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/prisma/schema.prisma).
+- [x] Implement safe local storage fallback for app state and email events in [store.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/store.ts).
+- [x] Seed realistic demo audition and subscription data in [demo-data.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/demo-data.ts).
 
 ## Auth
-- [x] Implement Google OAuth-ready NextAuth route
-- [x] Guard auth so missing OAuth credentials do not crash build or runtime
-- [x] Provide safe demo/local access path so the app remains usable without external credentials
-- [x] Verify sign-in and protected app routing work cleanly in dev/prod
+
+- [x] Wire NextAuth Google provider with guarded env checks in [auth.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/auth.ts).
+- [x] Expose auth route handler in [route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auth/[...nextauth]/route.ts).
+- [x] Provide credential-free demo sign-in and sign-out flows in [demo-login route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/demo-login/route.ts) and [demo-logout route](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/demo-logout/route.ts).
+- [x] Protect in-app routes through the cookie gate in [app layout](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/layout.tsx).
 
 ## User-Facing Pages
-- [x] Homepage `/`
-- [x] Sign-in page `/signin`
-- [x] Dashboard `/app`
-- [x] Pipeline board `/app/pipeline`
-- [x] Account and billing page `/app/account`
-- [x] SEO landing page `/acx-audition-tracker`
-- [x] SEO landing page `/voice-actor-crm`
-- [x] Free tool page `/royalty-share-calculator`
-- [x] Educational blog page `/blog/acx-royalty-share-vs-flat-fee`
-- [x] Review each page for polish/usability issues through rendered HTML and route smoke tests
-  - Follow-up fixes shipped: mobile app navigation and clearer droppable pipeline columns
 
-## API / Server Actions
-- [x] Auth handler `/api/auth/[...nextauth]`
-- [x] Demo login/logout flows
-- [x] Audition list/create API
-- [x] Audition update/delete API
-- [x] Audition status update API
-- [x] Billing checkout API with safe fallback
-- [x] Billing portal API with safe fallback
-- [x] CSV export API with plan gating
-- [x] Trial reminder API with safe fallback email path
-- [x] Validate request handling and runtime safety for each route
+- [x] Marketing homepage at [src/app/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/page.tsx).
+- [x] Sign-in page at [signin/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/signin/page.tsx).
+- [x] Dashboard page at [app/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/page.tsx).
+- [x] Pipeline page at [app/pipeline/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/pipeline/page.tsx).
+- [x] Auditions table/editor page at [app/auditions/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/auditions/page.tsx).
+- [x] Account and billing page at [app/account/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/app/account/page.tsx).
+- [x] Pricing page at [pricing/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/pricing/page.tsx).
+- [x] SEO landing pages at [acx-audition-tracker/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/acx-audition-tracker/page.tsx), [voice-actor-crm/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/voice-actor-crm/page.tsx), [royalty-share-calculator/page.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/royalty-share-calculator/page.tsx), and [blog page](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/blog/acx-royalty-share-vs-flat-fee/page.tsx).
+
+## API And Server Actions
+
+- [x] Audition list/create route in [api/auditions/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auditions/route.ts).
+- [x] Audition update/delete route in [api/auditions/[id]/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auditions/[id]/route.ts).
+- [x] Audition status update route in [api/auditions/[id]/status/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/auditions/[id]/status/route.ts).
+- [x] Billing checkout and portal fallbacks in [billing routes](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/billing/checkout/route.ts).
+- [x] CSV export route in [api/export/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/export/route.ts).
+- [x] Trial reminder routes in [api/internal/trial-reminders/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/internal/trial-reminders/route.ts) and [api/cron/trial-expiry/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/cron/trial-expiry/route.ts).
+- [x] Guarded Stripe webhook endpoint in [api/webhooks/stripe/route.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/api/webhooks/stripe/route.ts).
 
 ## Core Workflows
-- [x] Add audition form
-- [x] Move auditions through submitted/callback/offered/booked/passed workflow
-- [x] Dashboard KPI summaries
-- [x] Platform breakdown chart
-- [x] Genre conversion analysis with Pro gating
-- [x] Royalty-share calculator
-- [x] Inline royalty calculator on offered/booked royalty-share auditions
-- [x] CSV export for trial/pro users
-- [x] Smoke-test major interactive flows via HTTP/API session checks
 
-## Secondary Workflows
-- [x] Subscription plan switching fallback
-- [x] Invoice display
-- [x] Welcome email fallback logging
-- [x] Trial reminder fallback logging
-- [x] Confirm local-safe behavior when Stripe/Resend/Google/Postgres credentials are absent
+- [x] Add auditions from the pipeline form in [pipeline-board.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/pipeline-board.tsx).
+- [x] Move auditions through submitted, callback, offered, booked, and passed via drag-and-drop and dropdown status controls.
+- [x] Edit and delete auditions from the table editor in [auditions-table.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/auditions-table.tsx).
+- [x] View dashboard metrics, platform mix, trend data, and genre performance in [dashboard.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/dashboard.tsx).
+- [x] Use the royalty-share calculator both as a standalone page and inline in royalty-share offers/bookings.
 
-## Billing / Email / Storage Integrations
-- [x] Stripe integration scaffold with guarded lazy init
-- [x] Resend integration scaffold with guarded lazy init
-- [x] Local filesystem persistence fallback
-- [x] Document real credential requirements in `HUMAN_INPUT_NEEDED.md`
+## Billing, Email, And External Integrations
 
-## Marketing / SEO
-- [x] Metadata base config
-- [x] Marketing pages for target keyword cluster
-- [x] Blog content and free calculator hook
-- [x] `robots.ts`
-- [x] `sitemap.ts`
-- [x] Confirm metadata/base URL behavior and route coverage after build
+- [x] Guard Stripe client creation and fall back to local plan mutation in [billing.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/billing.ts).
+- [x] Guard Resend client creation and fall back to local event logs in [email.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/lib/email.ts).
+- [x] Document required live credentials in `HUMAN_INPUT_NEEDED.md`.
 
-## Deployment / Docker
-- [x] Set Next.js standalone output in `next.config.ts`
-- [x] Fix Dockerfile so it supports standalone runtime with the current repo layout
-- [x] Ensure `.dockerignore` is production-safe for the current build strategy
-- [x] Test `npm run build`
-- [ ] Test production Docker build locally if Docker is available
-  - Blocked by workspace Docker socket permissions: `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`
+## Marketing, SEO, And Deploy
+
+- [x] Set metadata, `robots`, and `sitemap` entries in [layout.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/layout.tsx), [robots.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/robots.ts), and [sitemap.ts](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/app/sitemap.ts).
+- [x] Ensure the main navigation surfaces pricing and in-app audition management in [site-header.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/marketing/site-header.tsx) and [app-shell.tsx](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/src/components/app-shell.tsx).
+- [x] Review Docker packaging in [Dockerfile](/opt/forge-builds/audition-pipeline-crm-voice-actors-narrators/Dockerfile) and `.dockerignore`.
 
 ## Verification
-- [x] Start dev server and confirm it does not crash
-- [x] Smoke-test primary routes
-- [x] Smoke-test key buttons, forms, navigation, and gated workflows
-- [x] Create `FORGE_COMPLETION_AUDIT.md`
-- [x] Create `HUMAN_INPUT_NEEDED.md`
-- [x] Re-read relevant PRD sections and update this checklist with final completion state
+
+- [x] `npm run build` passes locally.
+- [x] `npm run dev` starts and primary pages respond.
+- [ ] Docker image build executed locally.
+  Blocked by inaccessible Docker daemon socket in this environment.
