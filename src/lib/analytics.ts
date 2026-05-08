@@ -31,7 +31,7 @@ export function getDashboardMetrics(auditions: Audition[], plan: Plan) {
 
   const platformMap = new Map<string, number>();
   const genreMap = new Map<string, { submitted: number; booked: number }>();
-  const trendMap = new Map<string, { label: string; submitted: number; booked: number }>();
+  const trendMap = new Map<string, { key: string; label: string; submitted: number; booked: number }>();
 
   auditions.forEach((audition) => {
     platformMap.set(audition.platform, (platformMap.get(audition.platform) ?? 0) + 1);
@@ -46,6 +46,7 @@ export function getDashboardMetrics(auditions: Audition[], plan: Plan) {
     const date = new Date(audition.submittedAt);
     const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
     const trend = trendMap.get(key) ?? {
+      key,
       label: date.toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
       submitted: 0,
       booked: 0,
@@ -70,7 +71,9 @@ export function getDashboardMetrics(auditions: Audition[], plan: Plan) {
     }))
     .sort((a, b) => b.bookingRate - a.bookingRate);
 
-  const trend = [...trendMap.values()].sort((a, b) => a.label.localeCompare(b.label));
+  const trend = [...trendMap.values()]
+    .sort((a, b) => a.key.localeCompare(b.key))
+    .map(({ label, submitted, booked }) => ({ label, submitted, booked }));
 
   return {
     statusCounts,

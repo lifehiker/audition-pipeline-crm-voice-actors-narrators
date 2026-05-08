@@ -7,6 +7,7 @@ import {
   DragEndEvent,
   MouseSensor,
   TouchSensor,
+  useDroppable,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -126,6 +127,40 @@ function SortableAudition({
           </div>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function DroppableColumn({
+  status,
+  count,
+  children,
+}: {
+  status: PipelineStatus;
+  count: number;
+  children: React.ReactNode;
+}) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: status,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`rounded-[30px] border p-4 transition ${
+        isOver
+          ? "border-[var(--accent)] bg-[var(--accent-soft)]/45"
+          : "border-[var(--line)] bg-white/65"
+      }`}
+    >
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-[var(--ink)]">{status}</p>
+          <p className="text-sm text-[var(--muted-ink)]">{count} auditions</p>
+        </div>
+        <Badge variant="neutral">{count}</Badge>
+      </div>
+      {children}
     </div>
   );
 }
@@ -300,14 +335,7 @@ export function PipelineBoard({ initialAuditions, plan }: Props) {
         <DndContext sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
           <div className="grid gap-4 xl:grid-cols-5">
             {groups.map((group) => (
-              <div key={group.status} id={group.status} className="rounded-[30px] border border-[var(--line)] bg-white/65 p-4">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-[var(--ink)]">{group.status}</p>
-                    <p className="text-sm text-[var(--muted-ink)]">{group.items.length} auditions</p>
-                  </div>
-                  <Badge variant="neutral">{group.items.length}</Badge>
-                </div>
+              <DroppableColumn key={group.status} status={group.status} count={group.items.length}>
                 <SortableContext items={group.items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
                   <div className="grid gap-4">
                     {group.items.map((audition) => (
@@ -320,7 +348,7 @@ export function PipelineBoard({ initialAuditions, plan }: Props) {
                     ))}
                   </div>
                 </SortableContext>
-              </div>
+              </DroppableColumn>
             ))}
           </div>
         </DndContext>

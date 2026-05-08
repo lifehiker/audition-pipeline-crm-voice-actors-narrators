@@ -1,134 +1,173 @@
 # VoiceLog Completion Audit
 
-## Product Foundation
-- Branding, layout, metadata, and polished visual system
+Last updated: 2026-05-08
+
+## Foundation
+- App shell, global styling, metadata, and brand system
   - `src/app/layout.tsx`
   - `src/app/globals.css`
   - `src/components/marketing/site-header.tsx`
   - `src/components/marketing/site-footer.tsx`
-- Standalone Next.js deployment config
+- Next.js standalone deployment configuration
   - `next.config.ts`
   - `Dockerfile`
   - `.dockerignore`
   - `.env.example`
-  - Container hardening includes standalone runtime, `HOSTNAME=0.0.0.0`, telemetry disablement, and non-root execution
 
 ## Data Model
-- Prisma schema for users, accounts, sessions, verification tokens, subscriptions, and auditions
+- Auditions, subscriptions, auth tables, and analytics-supporting fields
   - `prisma/schema.prisma`
-- Lazy runtime database/client path
-  - `src/lib/prisma.ts`
-  - `src/lib/auth.ts`
-- Safe local persistence fallback with demo seed data
+- Typed app/domain models and constants
+  - `src/lib/types.ts`
+  - `src/lib/constants.ts`
+- Local-safe persistence fallback with seeded demo state
   - `src/lib/store.ts`
   - `src/lib/demo-data.ts`
-  - `src/lib/types.ts`
+- Prisma client helper for live database path
+  - `src/lib/prisma.ts`
 
 ## Authentication
-- NextAuth v5 route with Google provider and Prisma adapter path
+- Google OAuth-ready NextAuth v5 configuration
   - `src/lib/auth.ts`
   - `src/app/api/auth/[...nextauth]/route.ts`
-- Local-safe demo auth fallback, sign-in screen, login/logout flow, protected app layout
+- Safe demo auth fallback and protected app area
   - `src/app/signin/page.tsx`
   - `src/app/api/demo-login/route.ts`
   - `src/app/api/demo-logout/route.ts`
   - `src/app/app/layout.tsx`
 
-## Core App Pages
-- Marketing homepage
-  - Route: `/`
-  - Files: `src/app/page.tsx`, `src/components/marketing/homepage.tsx`
-- Dashboard with KPI cards, platform chart, genre performance, and trend stats
-  - Route: `/app`
-  - Files: `src/app/app/page.tsx`, `src/components/dashboard.tsx`, `src/components/charts.tsx`, `src/lib/analytics.ts`
-- Pipeline kanban with drag/drop, status dropdown, create/delete, inline royalty calculations
-  - Route: `/app/pipeline`
-  - Files: `src/app/app/pipeline/page.tsx`, `src/components/pipeline-board.tsx`, `src/components/royalty-calculator.tsx`
-- Billing/account and invoice/export view
-  - Route: `/app/account`
-  - Files: `src/app/app/account/page.tsx`
-- Free royalty-share calculator landing page
-  - Route: `/royalty-share-calculator`
-  - Files: `src/app/royalty-share-calculator/page.tsx`, `src/components/royalty-calculator.tsx`
+## User-Facing Pages
+- Marketing homepage `/`
+  - `src/app/page.tsx`
+  - `src/components/marketing/homepage.tsx`
+- Dashboard `/app`
+  - `src/app/app/page.tsx`
+  - `src/components/dashboard.tsx`
+  - `src/components/charts.tsx`
+  - `src/lib/analytics.ts`
+- Pipeline board `/app/pipeline`
+  - `src/app/app/pipeline/page.tsx`
+  - `src/components/pipeline-board.tsx`
+- Account and billing `/app/account`
+  - `src/app/app/account/page.tsx`
+- Sign-in `/signin`
+  - `src/app/signin/page.tsx`
+- ACX SEO page `/acx-audition-tracker`
+  - `src/app/acx-audition-tracker/page.tsx`
+- Voice actor CRM SEO page `/voice-actor-crm`
+  - `src/app/voice-actor-crm/page.tsx`
+- Free calculator `/royalty-share-calculator`
+  - `src/app/royalty-share-calculator/page.tsx`
+  - `src/components/royalty-calculator.tsx`
+- Blog page `/blog/acx-royalty-share-vs-flat-fee`
+  - `src/app/blog/acx-royalty-share-vs-flat-fee/page.tsx`
 
-## SEO / Marketing Pages
-- ACX landing page
-  - Route: `/acx-audition-tracker`
-  - File: `src/app/acx-audition-tracker/page.tsx`
-- Voice actor CRM landing page
-  - Route: `/voice-actor-crm`
-  - File: `src/app/voice-actor-crm/page.tsx`
-- Educational blog post with embedded calculator
-  - Route: `/blog/acx-royalty-share-vs-flat-fee`
-  - File: `src/app/blog/acx-royalty-share-vs-flat-fee/page.tsx`
+## API / Server Workflows
+- List/create auditions
+  - `src/app/api/auditions/route.ts`
+- Update/delete auditions
+  - `src/app/api/auditions/[id]/route.ts`
+- Pipeline status mutation
+  - `src/app/api/auditions/[id]/status/route.ts`
+- Billing checkout + portal
+  - `src/app/api/billing/checkout/route.ts`
+  - `src/app/api/billing/portal/route.ts`
+  - `src/lib/billing.ts`
+- CSV export with plan gating
+  - `src/app/api/export/route.ts`
+- Trial reminder email path
+  - `src/app/api/internal/trial-reminders/route.ts`
+  - `src/lib/email.ts`
+
+## Core Workflows
+- Add/edit/delete audition records with structured compensation fields
+  - `src/components/pipeline-board.tsx`
+  - `src/app/api/auditions/route.ts`
+  - `src/app/api/auditions/[id]/route.ts`
+- Move auditions through Submitted / Callback / Offered / Booked / Passed
+  - `src/components/pipeline-board.tsx`
+  - `src/app/api/auditions/[id]/status/route.ts`
+- Dashboard KPIs, platform mix, genre performance, and trend data
+  - `src/components/dashboard.tsx`
+  - `src/components/charts.tsx`
+  - `src/lib/analytics.ts`
+- Royalty-share calculator and inline offered/booked royalty analysis
+  - `src/components/royalty-calculator.tsx`
+  - `src/lib/royalty.ts`
+  - `src/components/pipeline-board.tsx`
+- CSV export for trial/pro, locked on solo
+  - `src/app/api/export/route.ts`
+
+## Billing / Email / Storage Integrations
+- Stripe lazy-init scaffold with local fallback
+  - `src/lib/billing.ts`
+- Resend lazy-init scaffold with local logging fallback
+  - `src/lib/email.ts`
+- Filesystem-backed fallback storage
+  - `src/lib/store.ts`
+  - Runtime data path: `.data/`
+
+## Marketing / SEO
+- Metadata and environment-aware base URL
+  - `src/app/layout.tsx`
+  - `src/lib/env.ts`
 - Sitemap and robots
   - `src/app/sitemap.ts`
   - `src/app/robots.ts`
 
-## API / Server Workflows
-- List and create auditions
-  - Route: `/api/auditions`
-  - File: `src/app/api/auditions/route.ts`
-- Update and delete audition records
-  - Route: `/api/auditions/[id]`
-  - File: `src/app/api/auditions/[id]/route.ts`
-- Change pipeline status
-  - Route: `/api/auditions/[id]/status`
-  - File: `src/app/api/auditions/[id]/status/route.ts`
-- CSV export with Pro/trial gating
-  - Route: `/api/export`
-  - File: `src/app/api/export/route.ts`
-- Billing checkout / portal fallbacks
-  - Routes: `/api/billing/checkout`, `/api/billing/portal`
-  - Files: `src/app/api/billing/checkout/route.ts`, `src/app/api/billing/portal/route.ts`, `src/lib/billing.ts`
-  - Runtime hardening: checkout now accepts both standard HTML form posts and JSON requests, preventing 500s from invalid content types during fallback billing flows
-- Welcome email and trial reminder fallback paths
-  - Files: `src/lib/email.ts`, `src/app/api/demo-login/route.ts`, `src/app/api/internal/trial-reminders/route.ts`
-
-## Business Logic
-- Platform, genre, pay type, plan, and status definitions
-  - `src/lib/constants.ts`
-- KPI and analytics calculations
+## Deployment Fixes Shipped
+- Hardened Docker build to use repository copy plus guaranteed `public/` creation before build
+  - `Dockerfile`
+- Hardened runtime image copies with `--chown`
+  - `Dockerfile`
+- Fixed chronological ordering for dashboard trend chart data
   - `src/lib/analytics.ts`
-- Royalty-share scenario calculations
-  - `src/lib/royalty.ts`
+- Added mobile app-shell navigation/logout so protected pages remain usable on small screens
+  - `src/components/app-shell.tsx`
+- Added explicit droppable pipeline columns for clearer drag/drop behavior
+  - `src/components/pipeline-board.tsx`
 
-## Guarded External Integrations / Safe Fallbacks
-- Google OAuth
-  - Live dependency: `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`
-  - Fallback: demo login path keeps the app usable without external auth
-- PostgreSQL / Prisma persistence
-  - Live dependency: `DATABASE_URL`
-  - Fallback: `.data/voicelog-state.json` local persistence keeps CRUD working
-- Stripe billing
-  - Live dependency: `STRIPE_SECRET_KEY`
-  - Fallback: local subscription mutation and invoice simulation in `src/lib/billing.ts`
-- Resend email
-  - Live dependency: `RESEND_API_KEY`
-  - Fallback: email event logging to `.data/email-events.json`
+## External Credential Items Intentionally Deferred
+- Google OAuth live auth
+  - Needs `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+  - App still runs through demo login fallback
+- PostgreSQL persistence
+  - Needs `DATABASE_URL`
+  - App still runs through local JSON persistence
+- Stripe live billing
+  - Needs `STRIPE_SECRET_KEY`
+  - App still runs through local subscription fallback
+- Resend live email delivery
+  - Needs `RESEND_API_KEY`
+  - App still runs through local email event logging
 
-## Verification Summary
+## Verification
 - `npm run build`
-  - Passed on 2026-05-08 after final patches
-- `npm run dev`
-  - Restarted cleanly on `http://127.0.0.1:3000`
+  - Passed after final fixes on 2026-05-08
+- Dev server
+  - Started successfully with `npm run dev -- --hostname 127.0.0.1 --port 3005`
 - Standalone production server
-  - Verified directly with `PORT=3002 HOSTNAME=127.0.0.1 node .next/standalone/server.js`
-- Smoke-tested routes
-  - `/`, `/signin`, `/app` redirect protection, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, `/royalty-share-calculator`
-- Smoke-tested interactions
-  - Demo login/logout
-  - Create audition
-  - Update audition status
-  - Delete audition
+  - Started successfully with `PORT=3006 HOSTNAME=127.0.0.1 node .next/standalone/server.js`
+- Route smoke tests completed
+  - `/`
+  - `/signin`
+  - `/app` redirect protection
+  - `/app`
+  - `/app/pipeline`
+  - `/app/account`
+  - `/acx-audition-tracker`
+  - `/voice-actor-crm`
+  - `/royalty-share-calculator`
+  - `/blog/acx-royalty-share-vs-flat-fee`
+- Workflow smoke tests completed
+  - Demo login cookie flow
+  - Audition create
+  - Audition status update
+  - Audition delete
   - CSV export success on trial
-  - CSV export denial on Solo
-  - Billing fallback redirect from both form posts and JSON requests
+  - CSV export denial on solo
+  - Billing checkout fallback redirect
+  - Billing portal fallback redirect
   - Trial reminder guarded route
-- Final runtime hardening patches
-  - `src/app/layout.tsx`: `metadataBase` now derives from environment-aware base URL instead of hard-coded localhost
-  - `src/app/signin/page.tsx`: corrected missing-credentials fallback copy
-  - `src/app/api/export/route.ts`: CSV export now safely handles blank notes
 - Docker
-  - `docker build .` could not be executed successfully because the environment lacks permission to access `/var/run/docker.sock`
-  - `Dockerfile` was re-hardened on 2026-05-08 for production runtime safety
+  - `docker build .` was attempted but could not run in this workspace because the Docker CLI cannot access `/var/run/docker.sock`

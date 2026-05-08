@@ -1,84 +1,96 @@
 # VoiceLog PRD Task Checklist
 
-## Phase 1: Foundation
-- [x] Read `PRD.md` end-to-end.
-- [x] Read `BUILD_INSTRUCTIONS.md` end-to-end.
-- [x] Scaffold Next.js 15 App Router project with TypeScript, Tailwind, ESLint, `src/` layout.
-- [x] Configure `next.config.ts` with `output: "standalone"`.
-- [x] Install and configure core UI/chart/form dependencies.
-- [x] Establish app information architecture, route structure, design tokens, and shared layout.
-- [x] Add environment/config helpers with safe runtime guards for missing credentials.
+Last updated: 2026-05-08
 
-## Phase 2: Data Model
-- [x] Define Prisma schema for users, accounts, sessions, subscriptions, auditions, notes/fields needed for analytics, and email/billing metadata.
-- [x] Add database access layer with lazy initialization and safe fallback when database credentials are unavailable.
-- [x] Seed/demo data path so app remains usable locally without external services.
+## Foundation
+- [x] Read `PRD.md` end-to-end and `BUILD_INSTRUCTIONS.md` end-to-end
+- [x] Audit existing app structure, routes, APIs, data layer, and deployment config
+- [x] Reproduce current build and deployment issues locally
+- [x] Check for relevant local Next.js docs in `node_modules/next/dist/docs/`
+  - Result: the expected docs directory is not present in this installed `next` package, so work proceeded from the live build output and framework behavior instead
 
-## Phase 3: Auth
-- [x] Implement NextAuth v5 configuration with Google OAuth provider and Prisma adapter path.
-- [x] Add guarded auth fallback/demo session flow when OAuth credentials are unavailable.
-- [x] Add login, logout, protected app routing, and session-aware navigation.
+## Data Model
+- [x] Define audition model covering platform, title, role, genre, pay type, structured economics, status, submission date, and notes
+- [x] Define subscription model with trial, solo, pro, invoices, renewal, and source metadata
+- [x] Include Prisma schema for production database path
+- [x] Provide safe local persistence fallback when database credentials are unavailable
+- [x] Verify Prisma artifacts and standalone build behavior are compatible with current repo layout
 
-## Phase 4: Core User-Facing App Pages
-- [x] Marketing homepage `/`.
-- [x] App dashboard `/app` with KPI cards, platform chart, genre performance, trend stats.
-- [x] Auditions pipeline page with Kanban/status management.
-- [x] Audition creation/edit flow.
-- [x] Royalty-share calculator page/tool.
-- [x] Billing/account page.
-- [x] Export access path.
+## Auth
+- [x] Implement Google OAuth-ready NextAuth route
+- [x] Guard auth so missing OAuth credentials do not crash build or runtime
+- [x] Provide safe demo/local access path so the app remains usable without external credentials
+- [x] Verify sign-in and protected app routing work cleanly in dev/prod
 
-## Phase 5: API / Server Actions
-- [x] Create audition.
-- [x] Update audition.
-- [x] Change pipeline status.
-- [x] Delete audition if needed for usability.
-- [x] Export CSV.
-- [x] Billing checkout/portal actions with guarded Stripe fallback.
-- [x] Email trigger paths with guarded Resend fallback.
+## User-Facing Pages
+- [x] Homepage `/`
+- [x] Sign-in page `/signin`
+- [x] Dashboard `/app`
+- [x] Pipeline board `/app/pipeline`
+- [x] Account and billing page `/app/account`
+- [x] SEO landing page `/acx-audition-tracker`
+- [x] SEO landing page `/voice-actor-crm`
+- [x] Free tool page `/royalty-share-calculator`
+- [x] Educational blog page `/blog/acx-royalty-share-vs-flat-fee`
+- [x] Review each page for polish/usability issues through rendered HTML and route smoke tests
+  - Follow-up fixes shipped: mobile app navigation and clearer droppable pipeline columns
 
-## Phase 6: Core Workflows
-- [x] Log a new audition with platform/genre/pay structure/date/notes.
-- [x] View submissions in dashboard metrics.
-- [x] Move auditions through Submitted -> Callback -> Offered -> Booked -> Passed.
-- [x] View royalty-share calculations inline for relevant auditions.
-- [x] Gate Pro analytics/export features while preserving trial/demo usability.
+## API / Server Actions
+- [x] Auth handler `/api/auth/[...nextauth]`
+- [x] Demo login/logout flows
+- [x] Audition list/create API
+- [x] Audition update/delete API
+- [x] Audition status update API
+- [x] Billing checkout API with safe fallback
+- [x] Billing portal API with safe fallback
+- [x] CSV export API with plan gating
+- [x] Trial reminder API with safe fallback email path
+- [x] Validate request handling and runtime safety for each route
 
-## Phase 7: Secondary Workflows
-- [x] Trial/pro plan presentation and gating copy.
-- [x] Subscription state handling.
-- [x] Demo/local-safe email event logging.
-- [x] Demo/local-safe billing state management.
+## Core Workflows
+- [x] Add audition form
+- [x] Move auditions through submitted/callback/offered/booked/passed workflow
+- [x] Dashboard KPI summaries
+- [x] Platform breakdown chart
+- [x] Genre conversion analysis with Pro gating
+- [x] Royalty-share calculator
+- [x] Inline royalty calculator on offered/booked royalty-share auditions
+- [x] CSV export for trial/pro users
+- [x] Smoke-test major interactive flows via HTTP/API session checks
 
-## Phase 8: Marketing / SEO
-- [x] SEO-ready homepage metadata and structured sections.
-- [x] `/acx-audition-tracker`.
-- [x] `/voice-actor-crm`.
-- [x] `/royalty-share-calculator`.
-- [x] `/blog/acx-royalty-share-vs-flat-fee`.
-- [x] Sitemap/robots metadata.
+## Secondary Workflows
+- [x] Subscription plan switching fallback
+- [x] Invoice display
+- [x] Welcome email fallback logging
+- [x] Trial reminder fallback logging
+- [x] Confirm local-safe behavior when Stripe/Resend/Google/Postgres credentials are absent
 
-## Phase 9: Deployment
-- [x] Production-ready Dockerfile for Next.js standalone output.
-- [x] Ensure Dockerfile only copies paths that exist.
-- [x] Add env example / deployment notes as needed.
+## Billing / Email / Storage Integrations
+- [x] Stripe integration scaffold with guarded lazy init
+- [x] Resend integration scaffold with guarded lazy init
+- [x] Local filesystem persistence fallback
+- [x] Document real credential requirements in `HUMAN_INPUT_NEEDED.md`
 
-## Phase 10: Verification
-- [x] Run `npm run build` and fix all errors.
-- [x] Start dev server and verify it does not crash.
-- [x] Smoke test primary routes.
-- [x] Test key interactions: auth entry, forms, navigation, status changes, calculator, export path, billing/account guards.
-- [x] Review UI for polish and non-template quality.
-- [x] Create `FORGE_COMPLETION_AUDIT.md`.
-- [x] Create `HUMAN_INPUT_NEEDED.md` only for genuine external credential requirements.
+## Marketing / SEO
+- [x] Metadata base config
+- [x] Marketing pages for target keyword cluster
+- [x] Blog content and free calculator hook
+- [x] `robots.ts`
+- [x] `sitemap.ts`
+- [x] Confirm metadata/base URL behavior and route coverage after build
 
-## Final Re-Verification Notes
-- [x] Re-read the PRD sections covering auth fallback, pipeline workflow, analytics gating, billing/email fallbacks, SEO pages, and deployment expectations after implementation.
-- [x] Confirmed `next.config.ts` uses `output: "standalone"` for production deployment.
-- [x] Rebuilt successfully on 2026-05-08 with `npm run build`.
-- [x] Hardened `/api/billing/checkout` so it accepts both browser form posts and JSON payloads instead of throwing a 500 on unexpected content types.
-- [x] Restarted the dev server from a clean `.next` directory and re-verified `/`, `/signin`, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, and `/royalty-share-calculator`.
-- [x] Re-verified demo login, audition create/status update/delete, billing fallback redirect, and CSV export gating from a reset `.data` baseline.
-- [x] Verified the standalone production entrypoint directly with `node .next/standalone/server.js`.
-- [x] Confirmed the Dockerfile only copies paths that exist in the repository and hardened the runtime image for standalone deployment.
-- [x] Attempted `docker build .`; Docker CLI exists, but this environment cannot access `/var/run/docker.sock`, so image execution could not be completed here.
+## Deployment / Docker
+- [x] Set Next.js standalone output in `next.config.ts`
+- [x] Fix Dockerfile so it supports standalone runtime with the current repo layout
+- [x] Ensure `.dockerignore` is production-safe for the current build strategy
+- [x] Test `npm run build`
+- [ ] Test production Docker build locally if Docker is available
+  - Blocked by workspace Docker socket permissions: `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`
+
+## Verification
+- [x] Start dev server and confirm it does not crash
+- [x] Smoke-test primary routes
+- [x] Smoke-test key buttons, forms, navigation, and gated workflows
+- [x] Create `FORGE_COMPLETION_AUDIT.md`
+- [x] Create `HUMAN_INPUT_NEEDED.md`
+- [x] Re-read relevant PRD sections and update this checklist with final completion state
