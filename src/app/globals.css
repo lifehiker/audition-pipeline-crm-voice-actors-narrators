@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f2e8;
+  --foreground: #16324f;
+  --paper: #f1ebe1;
+  --ink: #16324f;
+  --muted-ink: #5f7083;
+  --accent: #d66e43;
+  --accent-soft: #f2d7c8;
+  --line: #ddd4c7;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-mono: "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  background-image:
+    radial-gradient(circle at top left, rgba(120, 196, 187, 0.12), transparent 30%),
+    radial-gradient(circle at top right, rgba(214, 110, 67, 0.1), transparent 28%),
+    linear-gradient(180deg, #f7f2e8 0%, #fdfaf5 55%, #f3ede4 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(214, 110, 67, 0.18);
+}
+
+.grid-fade {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.34) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.34) 1px, transparent 1px);
+  background-size: 28px 28px;
+}

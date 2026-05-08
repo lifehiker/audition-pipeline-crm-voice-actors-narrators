@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PlanTier {
+  SOLO
+  PRO
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  CANCELED
+  PAST_DUE
+}
+
+enum PipelineStatus {
+  SUBMITTED
+  CALLBACK
+  OFFERED
+  BOOKED
+  PASSED
+}
+
+enum PayType {
+  ROYALTY_SHARE
+  FLAT_FEE
+  PER_FINISHED_HOUR
+  UNKNOWN
+}
+
+model User {
+  id                    String         @id @default(cuid())
+  name                  String?
+  email                 String?        @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  auditions             Audition[]
+  subscriptions         Subscription[]
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  onboardingCompletedAt DateTime?
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([sessionToken])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Subscription {
+  id                  String             @id @default(cuid())
+  userId              String
+  planTier            PlanTier
+  status              SubscriptionStatus
+  providerCustomerId  String?
+  providerSubId       String?
+  currentPeriodEnd    DateTime?
+  cancelAtPeriodEnd   Boolean            @default(false)
+  trialEndsAt         DateTime?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Audition {
+  id                   String         @id @default(cuid())
+  userId               String
+  platform             String
+  title                String
+  role                 String
+  genre                String
+  payType              PayType
+  payDetails           String?
+  flatFee              Float?
+  perFinishedHourRate  Float?
+  royaltyPercentage    Float?
+  estimatedFinishedHrs Float?
+  monthlySalesEstimate Float?
+  status               PipelineStatus @default(SUBMITTED)
+  submittedAt          DateTime
+  notes                String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, platform])
+  @@index([userId, genre])
+  @@index([userId, submittedAt])
+}
