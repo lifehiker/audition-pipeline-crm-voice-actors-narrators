@@ -11,6 +11,7 @@
   - `Dockerfile`
   - `.dockerignore`
   - `.env.example`
+  - Container hardening includes standalone runtime, `HOSTNAME=0.0.0.0`, telemetry disablement, and non-root execution
 
 ## Data Model
 - Prisma schema for users, accounts, sessions, verification tokens, subscriptions, and auditions
@@ -127,3 +128,4 @@
   - `src/app/api/export/route.ts`: CSV export now safely handles blank notes
 - Docker
   - `docker build .` could not be executed successfully because the environment lacks permission to access `/var/run/docker.sock`
+  - `Dockerfile` was re-hardened on 2026-05-08 for production runtime safety

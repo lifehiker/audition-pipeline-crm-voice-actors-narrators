@@ -78,5 +78,5 @@
 - [x] Rebuilt successfully on 2026-05-08 with `npm run build`.
 - [x] Restarted the dev server from a clean `.next` directory and re-verified `/`, `/signin`, `/app`, `/app/pipeline`, `/app/account`, `/acx-audition-tracker`, `/voice-actor-crm`, and `/royalty-share-calculator`.
 - [x] Re-verified demo login, audition create/status update/delete, billing fallback redirect, and CSV export gating.
-- [x] Confirmed the Dockerfile only copies paths that exist in the repository.
+- [x] Confirmed the Dockerfile only copies paths that exist in the repository and hardened the runtime image for standalone deployment.
 - [x] Attempted `docker build .`; Docker CLI exists, but this environment cannot access `/var/run/docker.sock`, so image execution could not be completed here.
