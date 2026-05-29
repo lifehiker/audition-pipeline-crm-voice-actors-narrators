@@ -36,6 +36,7 @@ ENV NEXT_PUBLIC_APP_URL=""
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 RUN mkdir -p /data && chown nextjs:nodejs /data
+RUN mkdir -p /app/.data && chown nextjs:nodejs /app/.data
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
