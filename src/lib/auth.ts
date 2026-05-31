@@ -15,7 +15,7 @@ const providers = hasGoogleOAuthConfig()
   : [];
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: hasDatabaseConfig() ? PrismaAdapter(getPrismaClient()) : undefined,
+  adapter: hasDatabaseConfig() && hasGoogleOAuthConfig() ? PrismaAdapter(getPrismaClient()) : undefined,
   session: { strategy: "jwt" },
   trustHost: true,
   providers,
