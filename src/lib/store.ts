@@ -2,7 +2,6 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { createDemoState } from "@/lib/demo-data";
-import { hasDatabaseConfig } from "@/lib/env";
 import type { AppState, Audition, PipelineStatus, Plan } from "@/lib/types";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
@@ -30,10 +29,6 @@ async function saveState(state: AppState) {
 }
 
 export async function getAppState() {
-  if (hasDatabaseConfig()) {
-    return readState();
-  }
-
   return readState();
 }
 
