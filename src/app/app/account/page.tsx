@@ -9,8 +9,8 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 
 const integrationCards = [
   {
-    label: "Google auth",
-    body: "NextAuth route present, demo mode available",
+    label: "Authentication",
+    body: "OAuth via Google when credentials are present; falls back to local workspace session.",
     Icon: ShieldCheck,
   },
   {
