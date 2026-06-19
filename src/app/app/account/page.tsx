@@ -9,8 +9,8 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 
 const integrationCards = [
   {
-    label: "Authentication",
-    body: "OAuth via Google when credentials are present; falls back to local workspace session.",
+    label: "Sign-in provider",
+    body: "Google is available when the admin has enabled it; the workspace runs fully without it.",
     Icon: ShieldCheck,
   },
   {
@@ -35,7 +35,7 @@ export default async function AccountPage() {
           <CardHeader>
             <CardTitle>Subscription</CardTitle>
             <CardDescription>
-              Manage plan access with Stripe when available or the local-safe billing fallback when credentials are absent.
+              Manage plan access with Stripe when available or the built-in billing fallback when not configured.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
