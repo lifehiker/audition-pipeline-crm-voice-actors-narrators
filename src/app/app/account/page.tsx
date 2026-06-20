@@ -9,7 +9,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 
 const integrationCards = [
   {
-    label: "Sign-in provider",
+    label: "Google integration",
     body: "Google is available when the admin has enabled it; the workspace runs fully without it.",
     Icon: ShieldCheck,
   },
